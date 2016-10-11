@@ -24,11 +24,13 @@
     <ul id="tags__ul">
       <li id="pl__all" class="tags__li tags-btn active">所有文章</li>
       
+      <li id="helloworld" class="tags__li tags-btn">helloworld</li>
+      
+      <li id="ios" class="tags__li tags-btn">ios</li>
+      
       <li id="react_native" class="tags__li tags-btn">react_native</li>
       
       <li id="default" class="tags__li tags-btn">default</li>
-      
-      <li id="helloworld" class="tags__li tags-btn">helloworld</li>
       
     </ul>
     <div id="tags__bottom">
@@ -44,6 +46,18 @@
     <nav id="pl__container">
       
             
+                <a class="helloworld pl__all" href="/2016/10/09/hello-world/" title="Hello World">
+                  <span class="pl__circle"></span><span class="pl__title">Hello World</span><span class="pl__date">2016-10-09</span>
+                </a>
+            
+      
+            
+                <a class="ios pl__all" href="/2016/10/11/ios麦克风权限申请/" title="ios麦克风权限申请">
+                  <span class="pl__circle"></span><span class="pl__title">ios麦克风权限申请</span><span class="pl__date">2016-10-11</span>
+                </a>
+            
+      
+            
                 <a class="react_native pl__all" href="/2016/10/10/react-native-android-6-0/" title="react_native_android_6.0">
                   <span class="pl__circle"></span><span class="pl__title">react_native_android_6.0</span><span class="pl__date">2016-10-10</span>
                 </a>
@@ -55,12 +69,6 @@
                 </a>
             
       
-            
-                <a class="helloworld pl__all" href="/2016/10/09/hello-world/" title="Hello World">
-                  <span class="pl__circle"></span><span class="pl__title">Hello World</span><span class="pl__date">2016-10-09</span>
-                </a>
-            
-      
     </nav>
   </div> <!-- end #posts-list -->
 </aside> <!-- end #sidebar -->
@@ -69,71 +77,11 @@
       <div id="pjax">
         
     <article id="post__content">
-      <h1 id="post__title" data-identifier="2016-10-10">react_native_android_6.0</h1>
-      <h1 id="react-native-android-6-0-动态权限申请"><a href="#react-native-android-6-0-动态权限申请" class="headerlink" title="react native android 6.0 动态权限申请"></a>react native android 6.0 动态权限申请</h1><h2 id="android-6-0-动态权限申请"><a href="#android-6-0-动态权限申请" class="headerlink" title="android 6.0 动态权限申请"></a>android 6.0 动态权限申请</h2><blockquote>
-<p>android 在sdk&gt;=23(6.0/M)之后，对权限问题进行了进一步的收缩，在4.x,5.x 那个年代，只需要在<strong>AndroidManifest.xml</strong>中声明需要的权限即可，而在M之后，TMD竟然崩溃了.</p>
-</blockquote>
-<p>言归正传，回到6.0动态权限申请，需要三个步骤:</p>
-<p>以下代码按照申请录音权限为例</p>
-<ul>
-<li>权限检测</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if(ContextCompat.checkSelfPermission(this, </div><div class="line">        	Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED)&#123;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>权限申请</li>
-</ul>
-<p>这里需要注意一下，<strong>RECORD_AUDIO_REQUEST_CODE</strong>即<strong>requestCode</strong>, 是自定义的int类型数据，在第三步会用到</p>
-<p>第二个参数是权限列表，支持申请多个。</p>
-<p>到这里，程序运行过程中，就会弹出”要允许xxx录制音频吗?”的alert,点击允许，即为app授权成功。</p>
-<ul>
-<li>授权回调</li>
-</ul>
-<p>重写Activity的<strong>onRequestPermissionsResult</strong>方法，</p>
-<p>这样，就完成了在6.0上的权限申请。</p>
-<blockquote>
-<p>完整代码</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends Activity&#123;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    public static final int RECORD_AUDIO_REQUEST_CODE = 666;</div><div class="line"></div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">	public void onPress() &#123;</div><div class="line">	        </div><div class="line">       if(ContextCompat.checkSelfPermission(this, </div><div class="line">        	Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">			// donot have permission </div><div class="line">           </div><div class="line">           ActivityCompat.requestPermissions(this, new String[]&#123;Manifest.permission.RECORD_AUDIO&#125;, RECORD_AUDIO_REQUEST_CODE);</div><div class="line">           </div><div class="line">         &#125; else &#123;</div><div class="line">            // okay, </div><div class="line">            doBusiness();</div><div class="line">         &#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">   public voic doBusiness() &#123;</div><div class="line">      // do business</div><div class="line">   </div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   @Override</div><div class="line">   public void onRequestPermissionsResult(</div><div class="line">       int requestCode, //第二步填写的requestcode</div><div class="line">       String[] permissions, //全县列表</div><div class="line">       int[] grantResults // 授权结果列表</div><div class="line">    )&#123;</div><div class="line">    switch (requestCode) &#123;</div><div class="line">    case RECORD_AUDIO_REQUEST_CODE:</div><div class="line">         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">             // Permission Granted</div><div class="line">             doBusiness(true);</div><div class="line">         &#125; else &#123;</div><div class="line">             // Permission Denied</div><div class="line">                    </div><div class="line">         &#125;</div><div class="line">         break;</div><div class="line">     default:</div><div class="line">         // default</div><div class="line">         break;</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line"></div><div class="line">   //...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="react-native-android-6-0-上进行动态权限申请"><a href="#react-native-android-6-0-上进行动态权限申请" class="headerlink" title="react native android 6.0 上进行动态权限申请"></a>react native android 6.0 上进行动态权限申请</h2><p> 还是按照语音权限申请为例</p>
-<p> 自己写了一个native module，作为bridge，为js提供native的功能，这个时候，遇上的权限问题。</p>
-<p> native module集成自ReactContextBaseJavaModule 可以进行上面前两步骤，但是没有回调，所以这样是不行的。</p>
-<p> 在源码中ack了一下，发现一个有趣的东西:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> ➜  react-native ack -r &apos;onRequestPermissionsResult&apos;</div><div class="line">ReactAndroid/src/androidTest/java/com/facebook/react/testing/ReactAppTestActivity.java</div><div class="line">252:  public void onRequestPermissionsResult(</div><div class="line"></div><div class="line">ReactAndroid/src/main/java/com/facebook/react/modules/core/PermissionListener.java</div><div class="line">22:   * &#123;@link Activity#onRequestPermissionsResult&#125;.</div><div class="line">26:  boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);</div><div class="line"></div><div class="line">ReactAndroid/src/main/java/com/facebook/react/modules/permissions/PermissionsModule.java</div><div class="line">127:  public boolean onRequestPermissionsResult(</div><div class="line"></div><div class="line">ReactAndroid/src/main/java/com/facebook/react/ReactActivity.java</div><div class="line">199:  public void onRequestPermissionsResult(</div><div class="line">204:        mPermissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults)) &#123;</div></pre></td></tr></table></figure>
-<p>显然，rn对这个问题是有考虑的，于是乎，在这里得到了答案<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ReactAndroid/src/main/java/com/facebook/react/modules/permissions/PermissionsModule.java</div></pre></td></tr></table></figure></p>
-<p>步骤如下:</p>
-<ul>
-<li>同样首先，进行权限检测</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">if (ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.RECORD_AUDIO)</div><div class="line">                        != PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">            //申请RECORD_AUDIO权限</div><div class="line">            PermissionAwareActivity activity = getPermissionAwareActivity();</div><div class="line">            activity.requestPermissions(new String[]&#123;Manifest.permission.RECORD_AUDIO&#125;, RECORD_AUDIO_REQUEST_CODE, this);</div><div class="line">			// donot have permission </div><div class="line"></div><div class="line">        &#125; else &#123;</div><div class="line">            doBusiness(false);</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>权限申请</li>
-</ul>
-<p>这里需要对该native module 增加一个实现 <strong>implements PermissionListener</strong> 并实现回调。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)</div></pre></td></tr></table></figure>
-<p>权限申请，并对currentactivity进行类型强转</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PermissionAwareActivity activity = (PermissionAwareActivity) getCurrentActivity();</div><div class="line"> activity.requestPermissions(new String[]&#123;Manifest.permission.RECORD_AUDIO&#125;, RECORD_AUDIO_REQUEST_CODE, this);</div></pre></td></tr></table></figure>
-<ul>
-<li><p>回调<br>需要注意的是，也需要给当前activity增加一个实现<strong>implements PermissionAwareActivity</strong></p>
-<p>并实现方法, 该方法会在第二步函数调用之后，被执行到</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener)&#123;</div><div class="line">	// 保存listener</div><div class="line">   mPermissionListener = listener;</div><div class="line">	// 这里进行权限申请，通普通权限申请一样</div><div class="line">   ActivityCompat.requestPermissions(this, permissions, requestCode);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>到这里，会弹出”要允许xxx录制音频吗?”的alert， 点击允许，为app授权</p>
-<ul>
-<li>actvity 回调</li>
-</ul>
-<p>对activity实现授权回调</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) &#123;</div><div class="line">     // 使用listener回调  </div><div class="line">      mPermissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 这样，就完成了在 react native android 6.0 中的动态权限申请</p>
-<blockquote>
-<p>完整代码</p>
-</blockquote>
-<p><code>MainActivity.java</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends Activity implements PermissionAwareActivity&#123;</div><div class="line"></div><div class="line">    private PermissionListener mPermissionListener;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">   @Override</div><div class="line">    public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) &#123;</div><div class="line">	    // request permissions</div><div class="line">        mPermissionListener = listener;</div><div class="line">        ActivityCompat.requestPermissions(this, permissions, requestCode);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) &#123;</div><div class="line">        // callback to native module </div><div class="line">        mPermissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults);</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">   //...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><code>test.java</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class Test extends ReactContextBaseJavaModule implements PermissionListener &#123;</div><div class="line"></div><div class="line">    </div><div class="line">    public static final int RECORD_AUDIO_REQUEST_CODE = 666;</div><div class="line"></div><div class="line">    public Test(ReactApplicationContext reactContext) &#123;</div><div class="line">        super(reactContext);</div><div class="line">        mReactContext = reactContext;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public String getName() &#123;</div><div class="line">        return &quot;Test&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @ReactMethod</div><div class="line">    public void startRecord(</div><div class="line">            Callback callback) &#123;</div><div class="line"></div><div class="line">        mCallback = callback;</div><div class="line">        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M &amp;&amp;</div><div class="line">                ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.RECORD_AUDIO)</div><div class="line">                        != PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">            //申请RECORD_AUDIO权限</div><div class="line">            PermissionAwareActivity activity = getPermissionAwareActivity();</div><div class="line">            activity.requestPermissions(new String[]&#123;Manifest.permission.RECORD_AUDIO&#125;, RECORD_AUDIO_REQUEST_CODE, this);</div><div class="line"></div><div class="line">        &#125; else &#123;</div><div class="line">            doBeginRecord();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public void doBeginRecord()&#123;</div><div class="line">      // do record business   </div><div class="line">    </div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) &#123;</div><div class="line">        switch (requestCode) &#123;</div><div class="line">            case RECORD_AUDIO_REQUEST_CODE:</div><div class="line">                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">                    // Permission Granted</div><div class="line">                    doBeginRecord(true);</div><div class="line">                &#125; else &#123;</div><div class="line">                    // Permission Denied</div><div class="line">                &#125;</div><div class="line">                break;</div><div class="line">            default:</div><div class="line">                // default</div><div class="line">                break;</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private PermissionAwareActivity getPermissionAwareActivity() &#123;</div><div class="line">        Activity activity = getCurrentActivity();</div><div class="line">        if (activity == null) &#123;</div><div class="line">            throw new IllegalStateException(&quot;Tried to use permissions API while not attached to an &quot; +</div><div class="line">                    &quot;Activity.&quot;);</div><div class="line">        &#125; else if (!(activity instanceof PermissionAwareActivity)) &#123;</div><div class="line">            throw new IllegalStateException(&quot;Tried to use permissions API but the host Activity doesn&apos;t&quot; +</div><div class="line">                    &quot; implement PermissionAwareActivity.&quot;);</div><div class="line">        &#125;</div><div class="line">        return (PermissionAwareActivity) activity;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="一点优化"><a href="#一点优化" class="headerlink" title="一点优化"></a>一点优化</h2><p>动态权限申请对于6.0一下的android os是没有作用的，所以，在权限检测是，可以对sdk 进行版本判断, 在if条件中加上以下判断即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">if(Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M)&#123;</div><div class="line">	// &gt;= 6.0</div><div class="line">&#125; else &#123;</div><div class="line"> 	// others</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      <h1 id="post__title" data-identifier="2016-10-11">ios麦克风权限申请</h1>
+      <h1 id="ios麦克风权限申请"><a href="#ios麦克风权限申请" class="headerlink" title="ios麦克风权限申请"></a>ios麦克风权限申请</h1><h1 id="权限申请"><a href="#权限申请" class="headerlink" title="权限申请"></a>权限申请</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">- (BOOL)canRecord</div><div class="line">&#123;</div><div class="line">    __block BOOL bCanRecord = YES;</div><div class="line"></div><div class="line">    if ([[[UIDevice currentDevice] systemVersion] compare:@&quot;7.0&quot;] != NSOrderedAscending)</div><div class="line">    &#123;</div><div class="line">        AVAudioSession *audioSession = [AVAudioSession sharedInstance];</div><div class="line">        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) &#123;</div><div class="line">            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) &#123;</div><div class="line">                if (granted) &#123;</div><div class="line">                    bCanRecord = YES;</div><div class="line">                &#125; else &#123;</div><div class="line">                    bCanRecord = NO;</div><div class="line">                &#125;</div><div class="line">            &#125;];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    return bCanRecord;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="ios-10-麦克风访问崩溃"><a href="#ios-10-麦克风访问崩溃" class="headerlink" title="ios 10 麦克风访问崩溃"></a>ios 10 麦克风访问崩溃</h1><p>ios 10上除了申请麦克风权限之外，还需要在plist文件中添加一对kv，否则会出现崩溃。</p>
+<p>如: </p>
+<p><code>Privacy - Microphone Usage Description</code>: <code>xxx程序将要访问你的麦克风， 是否允许?</code></p>
 
     </article>
     <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
@@ -151,7 +99,7 @@
 
 
 <!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="null" data-title="react_native_android_6.0" data-url="https://oillamp.github.io//2016/10/10/react-native-android-6-0/"></div>
+<div class="ds-thread" data-thread-key="null" data-title="ios麦克风权限申请" data-url="https://oillamp.github.io//2016/10/11/ios麦克风权限申请/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
